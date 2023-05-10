@@ -16,6 +16,8 @@ public class PlayState extends GameState {
     private Enemy enemy;
     private Camera cam;
 
+    //aceasta linie de cod a fost scrisa de un domn anonim
+
     public PlayState(GameStatesManager gsm) {
         super(gsm);
         map = new Vector2f();
