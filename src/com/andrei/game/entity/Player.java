@@ -16,9 +16,15 @@ public class Player extends Entity{
     public int ATTACK_LEFT = 3;
     public int ATTACK_UD_RIGHT= 4; //ud-->up down
     public int ATTACK_UD_LEFT= 5; //ud-->up down
-
     public int IDLE_RIGHT= 6;
     public int IDLE_LEFT= 7;
+
+
+    public int attack_time=40;
+    public boolean ready_atack;
+    public static int wait=0;
+
+
 
     public Player(Camera cam,Sprite sprite, Vector2f origin, int size) {
         super(sprite, origin, size);
@@ -32,7 +38,22 @@ public class Player extends Entity{
         bounds.setYOffset(80);
         hitBounds.setWidth(64);
         hitBounds.setHeight(64);
+        ready_atack=true;
+        attack_time=40;
+        wait=0;
     }
+    public void can_attack_timer(){
+        wait++;
+        System.out.println(wait);
+        if(wait >= attack_time)
+        {
+            wait=0;
+            ready_atack = true;
+        }
+        ready_atack = false;
+
+    }
+
 
     private void move(){
         if(up){
@@ -113,6 +134,8 @@ public class Player extends Entity{
                 enemy.dy -= 2;
             }
         }
+
+
         move();
         if(!tc.collisionTile(dx,0))
         {
@@ -154,8 +177,7 @@ public class Player extends Entity{
         if(key.left.down){
             left=true;
         }
-        else
-        {
+        else {
             left=false;
         }
         if(key.right.down){
@@ -164,7 +186,8 @@ public class Player extends Entity{
         else {
             right=false;
         }
-        if(key.attack.down){
+        if(key.attack.down && ready_atack){
+            System.out.println(wait);
             attack=true;
         }
         else {
@@ -181,7 +204,7 @@ public class Player extends Entity{
         }
         if(key.shift.down) {
             maxSpeed = 8;
-            cam.setMaxSpeed((float) 7.6);
+            cam.setMaxSpeed((float) 7.8);
         } else {
             maxSpeed = 4;
             cam.setMaxSpeed(4);
@@ -196,7 +219,6 @@ public class Player extends Entity{
         } else if (right) {
             lastAni= RIGHT;
         }
-
         if(left){
             if (currentAnimation != LEFT || ani.getDelay() == -1) {
                 setAnimation(LEFT,sprite.getSpriteArray(LEFT),5);
@@ -221,73 +243,11 @@ public class Player extends Entity{
         {
             setAnimation(currentAnimation, sprite.getSpriteArray(currentAnimation), -1);
         }
-
-
     }
 
-//////////////////////////////////////////////////////////////////
-    protected boolean isAttacking(double time) {
-
-        if((attacktime / 1000000) > ((time / 1000000) - attackSpeed)) {
-            canAttack = false;
-        } else {
-            canAttack = true;
-        }
-
-        if((attacktime / 1000000) + attackDuration > (time / 1000000)) {
-            return true;
-        }
-
-        return false;
-    }
-    public void update(double time){
-        super.update(time);
-        if(attack && hitBounds.collides(enemy.getBounds()))
-        {
-            enemy.health -= 1;
-            System.out.println("Tinta lovita");
-            if(enemy.currentAnimation == UP)
-            {
-                enemy.dy += 2;
-            }
-            if(enemy.currentAnimation == LEFT)
-            {
-                enemy.dx += 2;
-            }
-            if(enemy.currentAnimation == RIGHT)
-            {
-                enemy.dx -= 2;
-            }
-            if(enemy.currentAnimation == DOWN)
-            {
-                enemy.dy -= 2;
-            }
-        }
-        move();
-        if(!tc.collisionTile(dx,0))
-        {
-            pos.x += dx;
-            xCol=false;
-
-        }else {
-            xCol=true;
-        }
-        if(!tc.collisionTile(0,dy))
-        {
-
-            pos.y += dy;
-            yCol=false;
-        }else {
-            yCol=true;
-        }
-        xCol=false;
-        yCol=false;
-    }
-
-
- /////////////////////////////////////////////////////////////////
     @Override
     public void render(Graphics2D g) {
+
         g.setColor(Color.green);
         g.drawRect((int) (pos.getWorldVar().x + bounds.getXOffset()), ((int) (pos.getWorldVar().y + bounds.getYOffset())), (int) bounds.getWidth(), (int) bounds.getHeight());
         if(attack){

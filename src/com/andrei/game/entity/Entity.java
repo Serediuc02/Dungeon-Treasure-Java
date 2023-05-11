@@ -31,20 +31,7 @@ public abstract class Entity {
     protected boolean left;
     protected boolean attack;
 
-/////////////////////////////////////////////
 
-    protected int invincible = 500;
-    protected double invincibletime;
-    protected boolean isInvincible = false;
-    protected boolean die = false;
-
-    protected int attackSpeed = 1050; // in milliseconds
-    protected int attackDuration = 650; // in milliseconds
-    protected double attacktime;
-    protected boolean canAttack = true;
-    protected boolean attacking = false;
-
-////////////////////////////////////////
     protected float dx;
     protected float dy;
     protected float maxSpeed =4f;
@@ -133,18 +120,7 @@ public abstract class Entity {
         setHitBoxDirection();
         ani.update();
     }
- ///////////////////////////////////////////////////////
-    public void update(double time) {
-        if(isInvincible) {
-            if((invincibletime / 1000000) + invincible < (time / 1000000) ) {
-                isInvincible = false;
-            }
-        }
-        animate();
-        setHitBoxDirection();
-        ani.update();
-    }
-/////////////////////////////////////////////////////////////////////////
+
     public abstract void render(Graphics2D g);
     //public void input(KeyHandler key, MouseHandler mouse){}
 
