@@ -23,7 +23,7 @@ public class PlayState extends GameState {
         cam = new Camera(new AABB(new Vector2f(0, 0), GamePanel.width + 64, GamePanel.height + 64));
         tm = new TileManager("tile/tilemap.xml", cam);
         enemy = new Enemy(cam,new Sprite("entity/littlegirl.png", 48, 48), new Vector2f(0 + (GamePanel.width / 2) - 32  - 200, 0 + (GamePanel.height / 2) - 32 + 200), 64);
-        player = new Player(cam,new Sprite("entity/test1.png"), new Vector2f(0 + (GamePanel.width / 2) - 32, 0 + (GamePanel.height / 2) - 32), 128);
+        player = new Player(cam,new Sprite("entity/player2.png"), new Vector2f(0 + (GamePanel.width / 2) - 32, 0 + (GamePanel.height / 2) - 32), 128);
         cam.target(player);
     }
     public void update() {

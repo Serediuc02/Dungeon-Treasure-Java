@@ -12,10 +12,17 @@ import java.awt.*;
 public class Player extends Entity{
     private Camera cam;
 
+    public int ATTACK_RIGHT = 2;
+    public int ATTACK_LEFT = 3;
+    public int ATTACK_UD_RIGHT= 4; //ud-->up down
+    public int ATTACK_UD_LEFT= 5; //ud-->up down
+
+    public int IDLE_RIGHT= 6;
+    public int IDLE_LEFT= 7;
+
     public Player(Camera cam,Sprite sprite, Vector2f origin, int size) {
         super(sprite, origin, size);
         this.cam=cam;
-
         maxSpeed = 4f;
         acc = 1f; //accelerare
         deacc = 0.3f;
@@ -26,6 +33,7 @@ public class Player extends Entity{
         hitBounds.setWidth(64);
         hitBounds.setHeight(64);
     }
+
     private void move(){
         if(up){
             dy -= acc;
@@ -65,7 +73,6 @@ public class Player extends Entity{
                     dx=0;
                 }
             }
-
         }
         if(right){
             dx += acc;
@@ -125,9 +132,6 @@ public class Player extends Entity{
         }
         xCol=false;
         yCol=false;
-
-
-
     }
     public void input(MouseHandler mouse, KeyHandler key){
         if(mouse.getButton() == 1)
@@ -220,6 +224,68 @@ public class Player extends Entity{
 
 
     }
+
+//////////////////////////////////////////////////////////////////
+    protected boolean isAttacking(double time) {
+
+        if((attacktime / 1000000) > ((time / 1000000) - attackSpeed)) {
+            canAttack = false;
+        } else {
+            canAttack = true;
+        }
+
+        if((attacktime / 1000000) + attackDuration > (time / 1000000)) {
+            return true;
+        }
+
+        return false;
+    }
+    public void update(double time){
+        super.update(time);
+        if(attack && hitBounds.collides(enemy.getBounds()))
+        {
+            enemy.health -= 1;
+            System.out.println("Tinta lovita");
+            if(enemy.currentAnimation == UP)
+            {
+                enemy.dy += 2;
+            }
+            if(enemy.currentAnimation == LEFT)
+            {
+                enemy.dx += 2;
+            }
+            if(enemy.currentAnimation == RIGHT)
+            {
+                enemy.dx -= 2;
+            }
+            if(enemy.currentAnimation == DOWN)
+            {
+                enemy.dy -= 2;
+            }
+        }
+        move();
+        if(!tc.collisionTile(dx,0))
+        {
+            pos.x += dx;
+            xCol=false;
+
+        }else {
+            xCol=true;
+        }
+        if(!tc.collisionTile(0,dy))
+        {
+
+            pos.y += dy;
+            yCol=false;
+        }else {
+            yCol=true;
+        }
+        xCol=false;
+        yCol=false;
+    }
+
+
+ /////////////////////////////////////////////////////////////////
     @Override
     public void render(Graphics2D g) {
         g.setColor(Color.green);
