@@ -19,14 +19,13 @@ public class TileMapObj extends TileMap{
     private int tileHeight;
     public TileMapObj(String data, Sprite sprite, int width, int height, int tileWidth, int tileHeight, int tileColumns)
     {
-        Block tempBlock;
-        event_blocks = new Block[width * height];
-
         this.tileWidth=tileWidth;
         this.tileHeight=tileHeight;
-
         TileMapObj.width= width;
         TileMapObj.height= height;
+
+        Block tempBlock;
+        event_blocks = new Block[(width*height)+64];
 
         String[] block = data.split(",");
 
@@ -37,6 +36,7 @@ public class TileMapObj extends TileMap{
             {
                 if(temp == 2)
                 {
+
                     tempBlock = new HoleBlock(sprite.getSprite((int) ((temp-1) % tileColumns), (int) ((temp-1)) / tileColumns),new Vector2f((int) (i % width) * tileWidth,(int) (i/height) * tileHeight), tileWidth, tileHeight);
                 }
                 else
@@ -55,7 +55,7 @@ public class TileMapObj extends TileMap{
         {
             for(int j = y; j < y + (cam.getHeight() / tileHeight); j++)
             {
-                if(event_blocks[i+(j*height)] != null )
+                if(event_blocks[i+ (j*height)] != null )
                 {
                     event_blocks[i+(j*height)].render(g);
                 }

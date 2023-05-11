@@ -13,15 +13,14 @@ public class TileMapNorm extends TileMap{
     private int tileHeight;
     private int tileWidth;
     private int height;
+    private int width;
 
     public TileMapNorm(String data, Sprite sprite, int width, int height, int tileWidth, int tileHeight, int tileColumns){
-            blocks = new Block[width * height];
-
+            blocks = new Block[(width * height)+64];
             this.tileWidth =tileWidth;
             this.tileHeight=tileHeight;
-
             this.height=height;
-
+            this.width=width;
             String[] block = data.split(",");
             for(int i=0; i < (width * height); i++)
             {

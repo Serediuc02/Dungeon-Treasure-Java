@@ -5,7 +5,6 @@ import com.andrei.game.entity.Entity;
 import com.andrei.game.states.PlayState;
 import com.andrei.game.util.AABB;
 import com.andrei.game.util.Vector2f;
-
 import java.awt.*;
 
 public class Camera {
@@ -15,13 +14,11 @@ public class Camera {
     private boolean down;
     private boolean right;
     private boolean left;
-
     private float dx;
     private float dy;
     private float maxSpeed = 4f;
     private float acc = 1f;
     private float deacc = 4f;
-
     private int widthLimit;
     private int heightLimit;
     private Entity e;
@@ -37,7 +34,6 @@ public class Camera {
         this.heightLimit = heightLim;
     }
 
-
     public Vector2f getPos() {
         return colisionCam.getPos();
     }
@@ -45,14 +41,14 @@ public class Camera {
         return bounds;
     }
 
-    public void setMaxSpeed(int maxSpeed){
+    public void setMaxSpeed(float maxSpeed){
         this.maxSpeed = maxSpeed;
     }
     public AABB getBounds(){
         return colisionCam;
     }
 
-
+//TODO modifica camera cu tilesize si vezi in game manager daca mai trebuie 64 adunat
     public void update(){
         move();
         if(!e.xCol)
@@ -147,7 +143,6 @@ public class Camera {
 
     }
 
-    ////
 
     public void input(MouseHandler mouse, KeyHandler key){
         if(e == null)
@@ -200,7 +195,6 @@ public class Camera {
                 up=false;
                 down=false;
             }
-
             if(PlayState.map.x + GamePanel.width / 2 - e.getSize() / 2 + dx > e.getBounds().getPos().x + e.getDx() + 2 )
             {
                 left = true;
@@ -215,8 +209,6 @@ public class Camera {
                 left=false;
             }
         }
-
-
     }
 
     public void render(Graphics g)

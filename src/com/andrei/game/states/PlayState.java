@@ -16,20 +16,16 @@ public class PlayState extends GameState {
     private Enemy enemy;
     private Camera cam;
 
-    //aceasta linie de cod a fost scrisa de un domn anonim
-
     public PlayState(GameStatesManager gsm) {
         super(gsm);
         map = new Vector2f();
         Vector2f.setWorldVar(map.x, map.y);
         cam = new Camera(new AABB(new Vector2f(0, 0), GamePanel.width + 64, GamePanel.height + 64));
         tm = new TileManager("tile/tilemap.xml", cam);
-
         enemy = new Enemy(cam,new Sprite("entity/littlegirl.png", 48, 48), new Vector2f(0 + (GamePanel.width / 2) - 32  - 200, 0 + (GamePanel.height / 2) - 32 + 200), 64);
-        player = new Player(new Sprite("entity/test1.png"), new Vector2f(0 + (GamePanel.width / 2) - 32, 0 + (GamePanel.height / 2) - 32), 128);
+        player = new Player(cam,new Sprite("entity/test1.png"), new Vector2f(0 + (GamePanel.width / 2) - 32, 0 + (GamePanel.height / 2) - 32), 128);
         cam.target(player);
     }
-
     public void update() {
         Vector2f.setWorldVar(map.x, map.y);
         player.update(enemy);
@@ -40,14 +36,11 @@ public class PlayState extends GameState {
             enemy.update(player);
         }
     }
-
-
     public void input(MouseHandler mouse, KeyHandler key) {
 
         key.escape.tick();
         player.input(mouse, key);
         cam.input(mouse, key);
-
         if(key.escape.clicked)
         {
             if(gsm.getState(GameStatesManager.PAUSE))
@@ -57,7 +50,6 @@ public class PlayState extends GameState {
             }
         }
     }
-
     public void render(Graphics2D g) {
         tm.render(g);
         Sprite.drawArray(g, GamePanel.oldFrameCount + " FPS", new Vector2f(GamePanel.width - 192, 32), 32, 24);

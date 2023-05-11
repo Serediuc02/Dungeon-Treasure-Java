@@ -2,6 +2,7 @@ package com.andrei.game.entity;
 
 import com.andrei.game.graphics.Sprite;
 import com.andrei.game.states.PlayState;
+import com.andrei.game.util.Camera;
 import com.andrei.game.util.KeyHandler;
 import com.andrei.game.util.MouseHandler;
 import com.andrei.game.util.Vector2f;
@@ -9,9 +10,12 @@ import com.andrei.game.util.Vector2f;
 import java.awt.*;
 
 public class Player extends Entity{
-    public Player(Sprite sprite, Vector2f origin, int size) {
+    private Camera cam;
 
+    public Player(Camera cam,Sprite sprite, Vector2f origin, int size) {
         super(sprite, origin, size);
+        this.cam=cam;
+
         maxSpeed = 4f;
         acc = 1f; //accelerare
         deacc = 0.3f;
@@ -19,7 +23,6 @@ public class Player extends Entity{
         bounds.setHeight(20);
         bounds.setXOffset(43);
         bounds.setYOffset(80);
-
         hitBounds.setWidth(64);
         hitBounds.setHeight(64);
     }
@@ -171,6 +174,13 @@ public class Player extends Entity{
         {
             left=false;
             right=false;
+        }
+        if(key.shift.down) {
+            maxSpeed = 8;
+            cam.setMaxSpeed((float) 7.6);
+        } else {
+            maxSpeed = 4;
+            cam.setMaxSpeed(4);
         }
 
     }

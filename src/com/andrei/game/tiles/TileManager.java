@@ -4,12 +4,10 @@ import com.andrei.game.graphics.Sprite;
 import com.andrei.game.util.Camera;
 import com.andrei.game.util.Vector2f;
 
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,23 +18,19 @@ import java.util.ArrayList;
 
 
 public class TileManager {
-
     public static ArrayList<TileMap> tm;
     public Camera cam;
     public TileManager(){
         tm = new ArrayList<TileMap>();
     }
-
     public TileManager(String path, Camera cam){
         tm = new ArrayList<TileMap>();
         addTileMap(path, 64 ,64, cam);
     }
-
     public TileManager(String path,int blockWidth, int blockHeight ,Camera cam){
         tm= new ArrayList<TileMap>();
         addTileMap(path, blockWidth, blockHeight, cam);
     }
-
     private void addTileMap(String path, int blockWidth , int blockHeight, Camera cam){
 
         this.cam=cam;
@@ -49,12 +43,10 @@ public class TileManager {
         int tileColumns;
         int layers=0;
         Sprite sprite;
-
         String[] data = new String[10];
+        //cam.setTileSize(blockWidth);
 
         try{
-
-
             //DocumentBuilderFactory creaza un parser pe care il folosim in fisierul xml
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 
@@ -69,8 +61,6 @@ public class TileManager {
 
             //Extragem elementele din tagul tileset
             NodeList list = doc.getElementsByTagName("tileset");
-
-
             Node node = list.item(0);
             Element eElement = (Element) node;
 
@@ -80,10 +70,12 @@ public class TileManager {
             tileCount = Integer.parseInt(eElement.getAttribute("tilecount"));
             tileColumns = Integer.parseInt(eElement.getAttribute("columns"));
             sprite = new Sprite("tile/" + imagePath + ".png", tileWidth, tileHeight);
+
             System.out.println("tile/" + imagePath + ".png");
 
             list = doc.getElementsByTagName("layer");
             layers = list.getLength();
+
             for(int i = 0; i< layers;i++){
                 node = list.item(i);
                 eElement = (Element) node;
@@ -91,8 +83,6 @@ public class TileManager {
                     width = Integer.parseInt(eElement.getAttribute("width"));
                     height = Integer.parseInt(eElement.getAttribute("height"));
                 }
-
-
                 data[i] = eElement.getElementsByTagName("data").item(0).getTextContent();
 
                 if(i >= 1){
@@ -105,6 +95,8 @@ public class TileManager {
             }
         }catch (Exception e){
             System.out.println("ERROR TILEMANAGER: can not read tile map");
+            e.printStackTrace();
+            //System.exit(0);
         }
 
     }
