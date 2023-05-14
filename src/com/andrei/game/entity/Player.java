@@ -1,36 +1,25 @@
 package com.andrei.game.entity;
-
 import com.andrei.game.graphics.Sprite;
-import com.andrei.game.states.PlayState;
 import com.andrei.game.util.Camera;
 import com.andrei.game.util.KeyHandler;
 import com.andrei.game.util.MouseHandler;
 import com.andrei.game.util.Vector2f;
-
 import java.awt.*;
-
 public class Player extends Entity{
     private Camera cam;
-
     public int ATTACK_RIGHT = 2;
     public int ATTACK_LEFT = 3;
     public int ATTACK_UD_RIGHT= 4; //ud-->up down
     public int ATTACK_UD_LEFT= 5; //ud-->up down
     public int IDLE_RIGHT= 6;
     public int IDLE_LEFT= 7;
-
-
-    public int attack_time=40;
-    public boolean ready_atack;
-    public static int wait=0;
-
-
-
+    private int timer=0;
+    private int attackTime=10;
     public Player(Camera cam,Sprite sprite, Vector2f origin, int size) {
         super(sprite, origin, size);
         this.cam=cam;
         maxSpeed = 4f;
-        acc = 1f; //accelerare
+        acc = 1f;
         deacc = 0.3f;
         bounds.setWidth(45);
         bounds.setHeight(20);
@@ -38,23 +27,8 @@ public class Player extends Entity{
         bounds.setYOffset(80);
         hitBounds.setWidth(64);
         hitBounds.setHeight(64);
-        ready_atack=true;
-        attack_time=40;
-        wait=0;
-    }
-    public void can_attack_timer(){
-        wait++;
-        System.out.println(wait);
-        if(wait >= attack_time)
-        {
-            wait=0;
-            ready_atack = true;
-        }
-        ready_atack = false;
 
     }
-
-
     private void move(){
         if(up){
             dy -= acc;
@@ -113,29 +87,35 @@ public class Player extends Entity{
     }
     public void update(Enemy enemy){
         super.update();
-        if(attack && hitBounds.collides(enemy.getBounds()))
+
+        if(timer!=0)
+            timer--;
+
+        if(timer ==0)
         {
-            enemy.health -= 1;
-            System.out.println("Tinta lovita");
-            if(enemy.currentAnimation == UP)
+            timer = 30;
+            if (attack)
             {
-                enemy.dy += 2;
+                attackTime = 20;
             }
-            if(enemy.currentAnimation == LEFT)
-            {
-                enemy.dx += 2;
-            }
-            if(enemy.currentAnimation == RIGHT)
-            {
-                enemy.dx -= 2;
-            }
-            if(enemy.currentAnimation == DOWN)
-            {
-                enemy.dy -= 2;
+            if (attack && hitBounds.collides(enemy.getBounds())) {
+
+                enemy.health -= 10;
+                System.out.println("Tinta lovita");
+                if (enemy.currentAnimation == UP) {
+                    enemy.dy += 15;
+                }
+                if (enemy.currentAnimation == LEFT) {
+                    enemy.dx += 15;
+                }
+                if (enemy.currentAnimation == RIGHT) {
+                    enemy.dx -= 15;
+                }
+                if (enemy.currentAnimation == DOWN) {
+                    enemy.dy -= 15;
+                }
             }
         }
-
-
         move();
         if(!tc.collisionTile(dx,0))
         {
@@ -186,8 +166,7 @@ public class Player extends Entity{
         else {
             right=false;
         }
-        if(key.attack.down && ready_atack){
-            System.out.println(wait);
+        if(key.attack.down ){
             attack=true;
         }
         else {
@@ -247,10 +226,11 @@ public class Player extends Entity{
 
     @Override
     public void render(Graphics2D g) {
-
         g.setColor(Color.green);
         g.drawRect((int) (pos.getWorldVar().x + bounds.getXOffset()), ((int) (pos.getWorldVar().y + bounds.getYOffset())), (int) bounds.getWidth(), (int) bounds.getHeight());
-        if(attack){
+        if(attack && timer == 0 || attackTime != 0)
+        {
+            attackTime--;
             g.setColor(Color.red);
             g.drawRect((int) (hitBounds.getPos().getWorldVar().x + hitBounds.getXOffset()), (int) (hitBounds.getPos().getWorldVar().y + hitBounds.getYOffset()),(int) hitBounds.getWidth(),(int)  hitBounds.getHeight());
         }

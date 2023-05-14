@@ -29,12 +29,12 @@ public class PlayState extends GameState {
     public void update() {
         Vector2f.setWorldVar(map.x, map.y);
         player.update(enemy);
-
         cam.update();
         if(enemy.health > 0)
         {
             enemy.update(player);
         }
+
     }
     public void input(MouseHandler mouse, KeyHandler key) {
 
