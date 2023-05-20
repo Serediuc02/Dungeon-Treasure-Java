@@ -15,22 +15,20 @@ public abstract class Entity {
     protected final int DOWN = 2;
     protected final int RIGHT = 0;
     protected final int LEFT = 1;
-
     protected Animation ani;
-
     protected Sprite sprite;
     protected Vector2f pos;
-
     protected int size;
     protected int currentAnimation;
     protected int lastAni;
-
+    protected int lastDir;
     protected boolean up;
     protected boolean down;
     protected boolean right;
     protected boolean left;
     protected boolean attack;
 
+    protected boolean canAttack=true;
 
     protected float dx;
     protected float dy;
@@ -43,9 +41,9 @@ public abstract class Entity {
     public boolean yCol=false;
     protected TileCollision tc;
 
-    public Vector2f getPos() {
-        return pos;
-    }
+    //TODO de mutat tot ce tine de viata in entity si de abstractizat metodele
+
+
     public Entity(Sprite sprite, Vector2f origin, int size){
         this.sprite = sprite;
         pos = origin;
@@ -60,6 +58,45 @@ public abstract class Entity {
         ani = new Animation();
         setAnimation(RIGHT, sprite.getSpriteArray(RIGHT), 10);
         tc= new TileCollision(this);
+    }
+
+    public Animation getAnimation(){
+        return ani;
+    }
+
+    public void setAnimation(int i, BufferedImage[] frames, int delay){
+        currentAnimation = i;
+        ani.setFrames(i,frames);
+        ani.setDelay(delay);
+    }
+
+    private void setHitBoxDirection(){
+        if(up){
+            hitBounds.setYOffset(-size / 2 + 80);
+            hitBounds.setXOffset(31);
+        }
+        else if(down){
+            hitBounds.setXOffset(31);
+            hitBounds.setYOffset(size / 2 + 35);
+        }
+        else if(left){
+            hitBounds.setXOffset(-size / 2 + 40 );
+            hitBounds.setYOffset(46);
+        }
+        else if(right){
+            hitBounds.setXOffset(size / 2 + 21);
+            hitBounds.setYOffset(46);
+        }
+    }
+
+    public void update(){
+        animate();
+        setHitBoxDirection();
+        ani.update();
+    }
+
+    public Vector2f getPos() {
+        return pos;
     }
     public void setSprite(Sprite sprite){
         this.sprite = sprite;
@@ -84,42 +121,10 @@ public abstract class Entity {
     }
     public float getDx(){return dx;}
     public float getDy(){return dy;}
-    public Animation getAnimation(){
-        return ani;
-    }
-    public void setAnimation(int i, BufferedImage[] frames, int delay){
-        currentAnimation = i;
-        ani.setFrames(frames);
-        ani.setDelay(delay);
-
-    }
     public float getDeacc(){return deacc;}
     public float getAcc(){return acc;}
     public float getMaxSpeed(){return maxSpeed;}
     abstract public void animate();
-    private void setHitBoxDirection(){
-        if(up){
-            hitBounds.setYOffset(-size / 2 + 80);
-            hitBounds.setXOffset(31);
-        }
-        else if(down){
-            hitBounds.setXOffset(31);
-            hitBounds.setYOffset(size / 2 + 35);
-        }
-        else if(left){
-            hitBounds.setXOffset(-size / 2 + 40 );
-            hitBounds.setYOffset(46);
-        }
-        else if(right){
-            hitBounds.setXOffset(size / 2 + 21);
-            hitBounds.setYOffset(46);
-        }
-    }
-    public void update(){
-        animate();
-        setHitBoxDirection();
-        ani.update();
-    }
 
     public abstract void render(Graphics2D g);
     //public void input(KeyHandler key, MouseHandler mouse){}

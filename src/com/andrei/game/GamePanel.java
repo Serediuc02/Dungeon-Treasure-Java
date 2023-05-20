@@ -46,7 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         mouse= new MouseHandler(this);
         key= new KeyHandler(this);
-        gsm = new GameStatesManager();
+        gsm = new GameStatesManager(g);
     }
 
 

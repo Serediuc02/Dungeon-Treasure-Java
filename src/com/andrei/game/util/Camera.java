@@ -51,26 +51,32 @@ public class Camera {
 //TODO modifica camera cu tilesize si vezi in game manager daca mai trebuie 64 adunat
     public void update(){
         move();
-        if(!e.xCol)
+        if(e != null)
         {
-            if((e.getBounds().getPos().getWorldVar().x + e.getDx()) < Vector2f.getWorldVarX(widthLimit - colisionCam.getWidth() / 2) - 64 &&
-                    (e.getBounds().getPos().getWorldVar().x + e.getDx()) > Vector2f.getWorldVarX(GamePanel.width / 2 - 64 ))
+            if(!e.xCol)
             {
-                PlayState.map.x += dx;
-                bounds.getPos().x += dx;
+                if((e.getBounds().getPos().getWorldVar().x + e.getDx()) < Vector2f.getWorldVarX(widthLimit - colisionCam.getWidth() / 2) - 64 &&
+                        (e.getBounds().getPos().getWorldVar().x + e.getDx()) > Vector2f.getWorldVarX(GamePanel.width / 2 - 64 ))
+                {
+                    PlayState.map.x += dx;
+                   // colisionCam.getPos().x +=dx;
+                    bounds.getPos().x += dx;
+                }
+            }
+            if(!e.yCol)
+            {
+                if((e.getBounds().getPos().getWorldVar().y + e.getDy()) < Vector2f.getWorldVarY(heightLimit - colisionCam.getHeight() / 2) - 64 &&
+                        (e.getBounds().getPos().getWorldVar().y + e.getDy()) > Vector2f.getWorldVarY(GamePanel.height / 2 -64 ))
+                {
+
+                    PlayState.map.y += dy;
+                    bounds.getPos().y += dy;
+                   // colisionCam.getPos().y +=dy;
+                }
+
             }
         }
-        if(!e.yCol)
-        {
-            if((e.getBounds().getPos().getWorldVar().y + e.getDy()) < Vector2f.getWorldVarY(heightLimit - colisionCam.getHeight() / 2) - 64 &&
-                    (e.getBounds().getPos().getWorldVar().y + e.getDy()) > Vector2f.getWorldVarY(GamePanel.height / 2 -64 ))
-            {
 
-                PlayState.map.y += dy;
-                bounds.getPos().y += dy;
-            }
-
-        }
     }
     private void move(){
         if (up) {

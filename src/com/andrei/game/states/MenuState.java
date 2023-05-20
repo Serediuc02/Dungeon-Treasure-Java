@@ -8,6 +8,7 @@ import java.awt.*;
 public class MenuState extends GameState {
     public MenuState(GameStatesManager gsm){
         super(gsm);
+
     }
     @Override
     public void update() {

@@ -7,6 +7,9 @@ import com.andrei.game.tiles.TileManager;
 import com.andrei.game.util.*;
 import com.andrei.game.graphics.*;
 import java.awt.*;
+import java.util.List;
+import java.util.ArrayList;
+
 public class PlayState extends GameState {
 
     public static Vector2f map;
@@ -15,55 +18,101 @@ public class PlayState extends GameState {
     private TileManager tm;
     private Enemy enemy;
     private Camera cam;
+    private List<Enemy> enemies;
+    private int score=0;
 
-    public PlayState(GameStatesManager gsm) {
+    public PlayState(GameStatesManager gsm,Camera cam) {
         super(gsm);
+
         map = new Vector2f();
         Vector2f.setWorldVar(map.x, map.y);
-        cam = new Camera(new AABB(new Vector2f(0, 0), GamePanel.width + 64, GamePanel.height + 64));
+        cam = new Camera(new AABB(new Vector2f(0, 0), GamePanel.width + 128, GamePanel.height + 128));
+        this.cam=cam;
         tm = new TileManager("tile/tilemap.xml", cam);
-        enemy = new Enemy(cam,new Sprite("entity/littlegirl.png", 48, 48), new Vector2f(0 + (GamePanel.width / 2) - 32  - 200, 0 + (GamePanel.height / 2) - 32 + 200), 64);
+
+        enemies = new ArrayList<>();
+        enemies.add(new Enemy(cam, new Sprite("entity/littlegirl.png", 48, 48), new Vector2f(0 + (GamePanel.width / 2) - 32 - 200, 0 + (GamePanel.height / 2) - 32 + 200), 64));
+        enemies.add(new Enemy(cam, new Sprite("entity/littlegirl.png", 48, 48), new Vector2f(0 + (GamePanel.width / 2) - 32 - 300, 0 + (GamePanel.height / 2) - 32 + 100), 64));
         player = new Player(cam,new Sprite("entity/player2.png"), new Vector2f(0 + (GamePanel.width / 2) - 32, 0 + (GamePanel.height / 2) - 32), 128);
         cam.target(player);
     }
     public void update() {
         Vector2f.setWorldVar(map.x, map.y);
-        player.update(enemy);
-        cam.update();
-        if(enemy.health > 0)
+        if(!gsm.isStateActive(GameStatesManager.PAUSE))
         {
-            enemy.update(player);
+            for (int i = 0; i < enemies.size(); i++) {
+
+                Enemy currentEnemy = enemies.get(i);
+                currentEnemy.checkCoin(player);
+                if (currentEnemy.getHealth() <= 0) {
+
+                    continue; // Treci la următorul inamic dacă inamicul curent este mort
+                }
+                currentEnemy.update(player);
+                for (int j = i + 1; j < enemies.size(); j++) {
+                    Enemy otherEnemy = enemies.get(j);
+                    if (otherEnemy.getHealth() <= 0) {
+
+                        continue; // Treci la următorul inamic dacă inamicul analizat este mort
+                    }
+                    if (currentEnemy.getBounds().collides(otherEnemy.getBounds())) {
+                        currentEnemy.knockBack();
+                    }
+
+                }
+            }
+            player.update(enemies);
+            cam.update();
         }
-
     }
-    public void input(MouseHandler mouse, KeyHandler key) {
 
+
+    public void input(MouseHandler mouse, KeyHandler key) {
         key.escape.tick();
-        player.input(mouse, key);
-        cam.input(mouse, key);
+        if(!gsm.isStateActive(GameStatesManager.PAUSE))
+        {
+            player.input(mouse,key);
+            cam.input(mouse,key);
+        }
         if(key.escape.clicked)
         {
-            if(gsm.getState(GameStatesManager.PAUSE))
+            if(gsm.isStateActive(GameStatesManager.PAUSE))
+            {
                 gsm.pop(GameStatesManager.PAUSE);
-            else {
+
+            }
+            else
+            {
                 gsm.add(GameStatesManager.PAUSE);
             }
         }
     }
+
     public void render(Graphics2D g) {
         tm.render(g);
         Sprite.drawArray(g, GamePanel.oldFrameCount + " FPS", new Vector2f(GamePanel.width - 192, 32), 32, 24);
-        // de revenit si implementat scorul TODO
-        Sprite.drawArray(g, "SCORE: 0", new Vector2f(GamePanel.width/2, 10), 32, 23);
+        Sprite.drawArray(g, String.valueOf(score), new Vector2f(GamePanel.width/2, 32), 32, 20);
         player.render(g);
-        if(enemy.health > 0)
-        {
-            enemy.render(g);
+
+        for (Enemy enemy : enemies) {
+            if (enemy.health > 0) {
+                enemy.render(g);
+            }
+            if (enemy.coin.isVisible() && enemy.coin.isPicked()==false)
+            {
+                enemy.coin.render(g);
+                if(enemy.coin.coinCollision(player))
+                {
+                    enemy.coin.once=true;
+                }
+                if(enemy.coin.once==true)
+                {
+                    score+= 100;
+
+                }
+            }
 
         }
         cam.render(g);
-
-
-
     }
 }

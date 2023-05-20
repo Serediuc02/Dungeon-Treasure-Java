@@ -3,50 +3,55 @@ package com.andrei.game.graphics;
 import java.awt.image.BufferedImage;
 
 public class Animation {
-
     private BufferedImage[] frames;
     private  int currentFrame;
     private int numFrames;
-
     private int count;
     private int delay;
-
     private int timesPlayed;
+    private int[] states; // nr de coloane de pe sprite sheet 8
 
     public Animation(BufferedImage[] frames){
         timesPlayed = 0;
-        setFrames(frames);
-
+        setFrames(0,frames);
+        states = new int[8];
     }
-
     public Animation(){
-        timesPlayed=0;
-    }
 
-    public void setFrames(BufferedImage[] frames)
+        timesPlayed=0;
+        states = new int [8];
+    }
+    public void setFrames(int state, BufferedImage[] frames)
     {
         this.frames = frames;
-        currentFrame = 0;
+        currentFrame =0;
         count = 0;
         timesPlayed = 0;
         delay = 2;// timpul dintre 2 cadre
         numFrames = frames.length;
-    }
+        if(states[state] == 0) {
+            numFrames = frames.length;
+        } else {
+            numFrames = states[state];
+        }
 
+    }
     public void setDelay(int i){
         delay = i ;
     }
+
     public void setFrame(int i){
         currentFrame = i;
     }
 
-    public  void setNumFrames(int i){
-        numFrames = i;
+    public  void setNumFrames(int i, int state){
+
+        states[state]=i;
     }
+
     public void update(){
         if(delay == -1) return;
         count++;
-
         if(count == delay) {
             currentFrame++;
             count = 0;
@@ -55,9 +60,9 @@ public class Animation {
         if(currentFrame == numFrames){
             currentFrame = 0;
             timesPlayed++;
-
         }
     }
+
     public int getDelay(){
         return delay;
     }

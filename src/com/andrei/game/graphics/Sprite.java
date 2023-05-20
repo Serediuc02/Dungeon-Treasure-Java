@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+
 public class Sprite {
     private BufferedImage SPRITESHEET= null;
     private BufferedImage[][] spriteArray;
@@ -15,16 +16,21 @@ public class Sprite {
     public int h;
     private int wSprite;
     private int hSprite;
+    private String file;
     public static Font currentFont;
+
+
     public Sprite(String file){
+        this.file=file;
         w=TILE_SIZE;
         h=TILE_SIZE;
+
         System.out.println("Loading "+file +"...");
         SPRITESHEET = loadSprite(file);
+
         wSprite=SPRITESHEET.getWidth()/w;
         hSprite= SPRITESHEET.getHeight()/h;
         loadSpriteArray();
-
     }
     public Sprite(String file, int w,int h){
         this.w=w;
@@ -52,6 +58,12 @@ public class Sprite {
     }
     public int getWidth(){return w;}
     public int getHeight(){return h;}
+
+    public int getRows() { return hSprite; }
+    public int getCols() { return wSprite; }
+    public int getTotalTiles() { return wSprite * hSprite; }
+    public String getFilename() { return file; }
+
 
     private BufferedImage loadSprite(String file){
         BufferedImage sprite=null;
@@ -111,6 +123,10 @@ public class Sprite {
     }
     public static void drawArray(Graphics2D g,Font fn, String word, Vector2f pos, int size, int xOffset){
         drawArray(g,fn,word,pos,size,size,xOffset,0);
+    }
+
+    public BufferedImage getSubimg(int x, int y, int w, int h){
+        return SPRITESHEET.getSubimage(x,y,w,h);
     }
 
 

@@ -1,5 +1,6 @@
 package com.andrei.game.util;
 import com.andrei.game.entity.Entity;
+
 //Axis-Aligned Bounding Box
 
 public class AABB {
@@ -73,6 +74,7 @@ public class AABB {
     public float getYOffset(){return  yOffset;}
 
     public boolean collides(float dx, float dy, AABB bBox) {
+
         float ax = ((pos.x + (xOffset)) + (this.w / 2)) + dx;
         float ay = ((pos.y + (yOffset)) + (this.h / 2)) + dy;
         float bx = ((bBox.getPos().x + (bBox.getXOffset())) + (bBox.getWidth() / 2));
@@ -101,5 +103,20 @@ public class AABB {
             return true;
         }
         return false;
+    }
+    public boolean inside(int xx,int yy){
+        if(xx == -1 || yy == -1)
+            return false;
+        int wTemp = (int) this.w;
+        int hTemp = (int) this.h;
+        int x = (int) this.pos.x;
+        int y = (int) this.pos.y;
+
+        if(xx < x || yy < y){
+            return false;
+        }
+        wTemp += x;
+        hTemp += y;
+        return ((wTemp < x || wTemp > xx) && (hTemp < y || hTemp > yy));
     }
 }
