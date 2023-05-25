@@ -13,7 +13,7 @@ public class HoleBlock extends Block{
     @Override
     public boolean update(AABB p) {
 
-        System.out.println("Am cazut");
+        //System.out.println("Am cazut");
         return false;
     }
     public boolean isInside(AABB p){
@@ -31,8 +31,8 @@ public class HoleBlock extends Block{
 
     public void render(Graphics2D g){
         super.render(g);
-        g.setColor(Color.green);
-        g.drawRect((int) pos.getWorldVar().x, (int) pos.getWorldVar().y,w,h);
+        //g.setColor(Color.green);
+        //g.drawRect((int) pos.getWorldVar().x, (int) pos.getWorldVar().y,w,h);
     }
 
 }

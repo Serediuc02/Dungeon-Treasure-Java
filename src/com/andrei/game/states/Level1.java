@@ -9,6 +9,7 @@ import com.andrei.game.graphics.*;
 import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
+
 public class Level1 extends GameState {
 
     public static Vector2f map;
@@ -25,7 +26,7 @@ public class Level1 extends GameState {
         super(gsm);
         map = new Vector2f();
         Vector2f.setWorldVar(map.x, map.y);
-        //cam = new Camera(new AABB(new Vector2f(0, 0), GamePanel.width + 128, GamePanel.height + 128));
+
         this.cam=cam;
         tm = new TileManager("tile/tilemap1.xml", cam);
 
@@ -38,6 +39,7 @@ public class Level1 extends GameState {
         enemies.add(new Enemy(cam, new Sprite("entity/monk.png", 32, 32), new Vector2f(0 + (GamePanel.width / 2) + 600, 0 + (GamePanel.height / 2) - 32 + 2400), 128));
         enemies.add(new Enemy(cam, new Sprite("entity/monk.png", 32, 32), new Vector2f(0 + (GamePanel.width / 2) +2000, 0 + (GamePanel.height / 2) - 32 + 2100), 128));
 
+        ScoreBd.CitireScoruri();
 
         for (Enemy enemy : enemies) {
             enemy.setHealth(50,50);
@@ -53,6 +55,7 @@ public class Level1 extends GameState {
             if(player.health <=0)
             {
                 gsm.add(GameStatesManager.GAMEOVER);
+               // ScoreBd.ScriereScor(1,score);
                 gsm.pop(GameStatesManager.PLAY1);
             }
 
@@ -66,7 +69,7 @@ public class Level1 extends GameState {
 
                 if (currentEnemy.getHealth() <= 0) {
 
-                    continue; // Treci la următorul inamic dacă inamicul curent este mort
+                    continue; // Trece la următorul inamic dacă inamicul curent este mort
                 }
 
 
@@ -75,7 +78,7 @@ public class Level1 extends GameState {
                     Enemy otherEnemy = enemies.get(j);
                     if (otherEnemy.getHealth() <= 0) {
 
-                        continue; // Treci la următorul inamic dacă inamicul analizat este mort
+                        continue; // Trece la următorul inamic dacă inamicul analizat este mort
                     }
                     if (currentEnemy.getBounds().collides(otherEnemy.getBounds())) {
                         currentEnemy.knockBack();
@@ -84,10 +87,12 @@ public class Level1 extends GameState {
                 }
             }
             player.update(enemies);
+
             cam.update();
-            if (allEnemiesDead) { // Pasul 4
-                gsm.add(GameStatesManager.GAMEOVER); // Pasul 5
-                gsm.pop(GameStatesManager.PLAY1); // Pasul 5
+            if (allEnemiesDead) {
+                ScoreBd.ScriereScor(1,score);
+                gsm.add(GameStatesManager.GAMEOVER);
+                gsm.pop(GameStatesManager.PLAY1);
             }
         }
 
@@ -117,10 +122,13 @@ public class Level1 extends GameState {
 
     public void render(Graphics2D g) {
         tm.render(g);
-        Sprite.drawArray(g, GamePanel.oldFrameCount + " FPS", new Vector2f(GamePanel.width - 192, 32), 32, 24);
-        Sprite.drawArray(g, String.valueOf(score), new Vector2f(GamePanel.width/2, 32), 32, 20);
-        player.render(g);
+        Sprite.drawArray(g, "Max Score:", new Vector2f(GamePanel.width/2-620 , 32), 26, 20);
+        Sprite.drawArray(g, String.valueOf(ScoreBd.scoreLv1), new Vector2f(GamePanel.width/2-620 , 64), 26, 20);
 
+//        Sprite.drawArray(g, GamePanel.oldFrameCount + " FPS", new Vector2f(GamePanel.width - 192, 32), 32, 24);
+        Sprite.drawArray(g, String.valueOf(score), new Vector2f(GamePanel.width/2, 32), 32, 20);
+
+        player.render(g);
         for (Enemy enemy : enemies) {
             if (enemy.health > 0) {
                 enemy.render(g);

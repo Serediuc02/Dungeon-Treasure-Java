@@ -33,6 +33,8 @@ public class Level2 extends GameState {
         enemies.add(new Enemy(cam, new Sprite("entity/guard.png"), new Vector2f(0 + (GamePanel.width / 2) +1000  , 0 + (GamePanel.height / 2) +1400 ), 128));
         enemies.add(new Enemy(cam, new Sprite("entity/guard.png"), new Vector2f(0 + (GamePanel.width / 2) +1000  , 0 + (GamePanel.height / 2) +2500 ), 128));
 
+        ScoreBd.CitireScoruri();
+
         for (Enemy enemy : enemies) {
             enemy.setHealth(65,65);
         }
@@ -48,7 +50,9 @@ public class Level2 extends GameState {
             boolean allEnemiesDead = true;
             if(player.health <=0)
             {
+
                 gsm.add(GameStatesManager.GAMEOVER);
+                ScoreBd.ScriereScor(2,score);
                 gsm.pop(GameStatesManager.PLAY2);
             }
 
@@ -80,9 +84,10 @@ public class Level2 extends GameState {
             }
             player.update(enemies);
             cam.update();
-            if (allEnemiesDead) { // Pasul 4
-                gsm.add(GameStatesManager.GAMEOVER); // Pasul 5
-                gsm.pop(GameStatesManager.PLAY1); // Pasul 5
+            if (allEnemiesDead) {
+                gsm.add(GameStatesManager.GAMEOVER);
+                ScoreBd.ScriereScor(2,score);
+                gsm.pop(GameStatesManager.PLAY2);
             }
         }
 
@@ -112,8 +117,10 @@ public class Level2 extends GameState {
 
     public void render(Graphics2D g) {
         tm.render(g);
-        Sprite.drawArray(g, GamePanel.oldFrameCount + " FPS", new Vector2f(GamePanel.width - 192, 32), 32, 24);
+//        Sprite.drawArray(g, GamePanel.oldFrameCount + " FPS", new Vector2f(GamePanel.width - 192, 32), 32, 24);
         Sprite.drawArray(g, String.valueOf(score), new Vector2f(GamePanel.width/2, 32), 32, 20);
+        Sprite.drawArray(g, "Max Score:", new Vector2f(GamePanel.width/2-620 , 32), 26, 20);
+        Sprite.drawArray(g, String.valueOf(ScoreBd.scoreLv2), new Vector2f(GamePanel.width/2-620 , 64), 26, 20);
         player.render(g);
 
         for (Enemy enemy : enemies) {

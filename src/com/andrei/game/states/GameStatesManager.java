@@ -100,9 +100,6 @@ public class GameStatesManager
         for(int i=0; i < states.length; i++)
         {
             if(states[i]!=null)
-                System.out.println(states[i]);
-
-            if(states[i]!=null)
             {
                 states[i].update();
             }
