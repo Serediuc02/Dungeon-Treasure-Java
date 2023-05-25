@@ -57,8 +57,8 @@ public class Coin extends Entity {
         if(isVisible)
         {
             g.drawImage(sprite.getSpriteSheet(),(int) (pos.getWorldVar().x+bounds.getXOffset())-2,(int) (pos.getWorldVar().y+bounds.getYOffset()-3),null);
-            g.setColor(Color.cyan);
-            g.drawRect((int) (pos.getWorldVar().x + bounds.getXOffset()), ((int) (pos.getWorldVar().y + bounds.getYOffset())), (int) bounds.getWidth(), (int) bounds.getHeight());
+//            g.setColor(Color.cyan);
+//            g.drawRect((int) (pos.getWorldVar().x + bounds.getXOffset()), ((int) (pos.getWorldVar().y + bounds.getYOffset())), (int) bounds.getWidth(), (int) bounds.getHeight());
 //            g.setColor(Color.RED);
 //            g.drawRect((int) (pos.x), (int) (pos.y ), (int) bounds.getWidth(), (int) bounds.getHeight());
 

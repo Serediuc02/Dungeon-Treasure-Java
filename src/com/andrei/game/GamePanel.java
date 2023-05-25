@@ -50,7 +50,37 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
 
-    @Override
+    @Override//            if(GameStatesManager.states[GameStatesManager.PLAY1]!=null)
+//            {
+//                if(Level1.map.y + GamePanel.height / 2 - e.getSize() / 2 + dy > e.getBounds().getPos().y + e.getDy() + 2 )
+//                {
+//                    up = true;
+//                    down=false;
+//                } else if (Level1.map.y + GamePanel.height / 2 - e.getSize() / 2 + dy < e.getBounds().getPos().y + e.getDy() - 2)
+//                {
+//                    down=true;
+//                    up=false;
+//                }else {
+//                    dy=0;
+//                    up=false;
+//                    down=false;
+//                }
+//                if(Level1.map.x + GamePanel.width / 2 - e.getSize() / 2 + dx > e.getBounds().getPos().x + e.getDx() + 2 )
+//                {
+//                    left = true;
+//                    right=false;
+//                } else if (Level1.map.x + GamePanel.width / 2 - e.getSize() / 2 + dx < e.getBounds().getPos().x + e.getDx() - 2)
+//                {
+//                    right=true;
+//                    left=false;
+//                }else {
+//                    dx=0;
+//                    right=false;
+//                    left=false;
+//                }
+//
+//            }
+
     public void run(){
         init();
 

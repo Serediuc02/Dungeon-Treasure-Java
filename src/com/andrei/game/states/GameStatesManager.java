@@ -13,17 +13,16 @@ import java.awt.*;
 
 public class GameStatesManager
 {
-    private GameState states[];
-
+    public static GameState states[];
     public static Vector2f map;
     public static final int MENU = 0;
-    public static final int PAUSE = 1;
-    public static final int GAMEOVER = 2;
+    public static final int LEVELSELECTOR = 1;
+    public static final int PLAY1 = 2;
+    public static final int PLAY2 = 3;
+    public static final int PLAY3 = 4;
+    public static final int PAUSE = 5;
+    public static final int GAMEOVER = 6;
 
-    public static final int LEVELSELECTOR = 3;
-    public static final int PLAY1 = 4;
-    public static final int PLAY2 = 5;
-    public static final int PLAY3 = 6;
 
     public static Font font;
     public static Fontf fontf;
@@ -47,9 +46,7 @@ public class GameStatesManager
 
         ui = new Sprite("ui/ui.png",64,64);
         button = new Sprite("ui/buttons.png",122,57);
-
         cam = new Camera(new AABB(new Vector2f(-64, -64), GamePanel.width + 128, GamePanel.height + 128));
-
         states[MENU]= new MenuState(this);
         //states[PLAY]= new PlayState(this,cam);
 
@@ -57,25 +54,23 @@ public class GameStatesManager
 
     public void add(int state) {
         if (states[state] != null){
-
             return;
         }
         if(state == PLAY1)
         {
             cam = new Camera(new AABB(new Vector2f(0,0), GamePanel.width+64,GamePanel.height+64));
-            states[PLAY1]= new PlayState(this,cam);
+            states[PLAY1]= new Level1(this,cam);
 
         } else if (state == PLAY2) {
             cam = new Camera(new AABB(new Vector2f(0,0), GamePanel.width+64,GamePanel.height+64));
-            states[PLAY2]= new PlayState(this,cam);
+            states[PLAY2]= new Level2(this,cam);
 
         } else if (state == PLAY3) {
             cam = new Camera(new AABB(new Vector2f(0,0), GamePanel.width+64,GamePanel.height+64));
-            states[PLAY3]= new PlayState(this,cam);
+            states[PLAY3]= new Level3(this,cam);
 
         }else if(state == MENU)
         {
-
             states[MENU]= new MenuState(this);
         }
         else if(state == PAUSE)

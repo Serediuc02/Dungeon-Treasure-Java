@@ -19,6 +19,7 @@ public class Player extends Entity {
     public int IDLE_LEFT = 7;
     private Camera cam;
     private int timer = 0;
+    public int health=100;
     private int attackTime = 10;
 
     public Player(Camera cam, Sprite sprite, Vector2f origin, int size) {
@@ -111,8 +112,7 @@ public class Player extends Entity {
             }
             for (Enemy enemy : enemies) {
                 if (attack && hitBounds.collides(enemy.getBounds())) {
-                    enemy.health -= 50;
-                    System.out.println("Tinta lovita");
+                    enemy.health -= 20;
                     if (enemy.currentAnimation == UP) {
                         enemy.dy += 15;
                     }
@@ -148,11 +148,7 @@ public class Player extends Entity {
     }
 
     public void input(MouseHandler mouse, KeyHandler key) {
-//        if(mouse.getButton() == 1)
-//        {
-//            System.out.println("Player: " + pos.x + ", " + pos.y);
-//        }
-//        Testare coordonate
+
 
         if (key.up.down) {
             up = true;
@@ -268,15 +264,17 @@ public class Player extends Entity {
 
     @Override
     public void render(Graphics2D g) {
-        g.setColor(Color.green);
-        g.drawRect((int) (pos.getWorldVar().x + bounds.getXOffset()), ((int) (pos.getWorldVar().y + bounds.getYOffset())), (int) bounds.getWidth(), (int) bounds.getHeight());
+//        g.setColor(Color.green);
+//        g.drawRect((int) (pos.getWorldVar().x + bounds.getXOffset()), ((int) (pos.getWorldVar().y + bounds.getYOffset())), (int) bounds.getWidth(), (int) bounds.getHeight());
         if (attack && timer == 0 || attackTime != 0) {
             attackTime--;
-            g.setColor(Color.red);
-            g.drawRect((int) (hitBounds.getPos().getWorldVar().x + hitBounds.getXOffset()), (int) (hitBounds.getPos().getWorldVar().y + hitBounds.getYOffset()), (int) hitBounds.getWidth(), (int) hitBounds.getHeight());
+//            g.setColor(Color.red);
+//            g.drawRect((int) (hitBounds.getPos().getWorldVar().x + hitBounds.getXOffset()), (int) (hitBounds.getPos().getWorldVar().y + hitBounds.getYOffset()), (int) hitBounds.getWidth(), (int) hitBounds.getHeight());
         }
         g.drawImage(ani.getImage(), (int) (pos.getWorldVar().x), (int) (pos.getWorldVar().y), size, size, null);
+        g.setColor(Color.red);
+        g.fillRect((int) (pos.getWorldVar().x + bounds.getXOffset() ), (int) (pos.getWorldVar().y + 40), 44, 5);
+        g.setColor(Color.green);
+        g.fillRect((int) (pos.getWorldVar().x + bounds.getXOffset() ), (int) (pos.getWorldVar().y + 40), (int) (44 *health/100), 5);
     }
-
-
 }

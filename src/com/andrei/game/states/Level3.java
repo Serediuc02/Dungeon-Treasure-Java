@@ -28,10 +28,13 @@ public class Level3 extends GameState {
         tm = new TileManager("tile/tilemap3.xml", cam);
 
         enemies = new ArrayList<>();
-        enemies.add(new Enemy(cam, new Sprite("entity/monk.png"), new Vector2f(0 + (GamePanel.width / 2) - 32 , 0 + (GamePanel.height / 2) - 32 ), 128));
-        enemies.add(new Enemy(cam, new Sprite("entity/troll.png", 32, 32), new Vector2f(0 + (GamePanel.width / 2) - 32 - 300, 0 + (GamePanel.height / 2) - 32 + 100), 128));
-        enemies.add(new Enemy(cam, new Sprite("entity/guard.png", 32, 32), new Vector2f(0 + (GamePanel.width / 2) - 32 + 300, 0 + (GamePanel.height / 2) - 32 + 100), 128));
+        enemies.add(new Enemy(cam, new Sprite("entity/troll.png"), new Vector2f(0 + (GamePanel.width / 2) - 500 , 0 + (GamePanel.height / 2) -100 ), 128));
+        enemies.add(new Enemy(cam, new Sprite("entity/troll.png"), new Vector2f(0 + (GamePanel.width / 2) +1400 , 0 + (GamePanel.height / 2) +900 ), 128));
+        enemies.add(new Enemy(cam, new Sprite("entity/troll.png"), new Vector2f(0 + (GamePanel.width / 2) -200 , 0 + (GamePanel.height / 2) +2200 ), 128));
 
+        for (Enemy enemy : enemies) {
+            enemy.setHealth(125,125);
+        }
         player = new Player(cam,new Sprite("entity/player2.png"), new Vector2f(0 + (GamePanel.width / 2) - 32+60, 0 + (GamePanel.height / 2) - 32), 128);
         cam.target(player);
     }
@@ -39,14 +42,27 @@ public class Level3 extends GameState {
         Vector2f.setWorldVar(map.x, map.y);
         if(!gsm.isStateActive(GameStatesManager.PAUSE))
         {
-            for (int i = 0; i < enemies.size(); i++) {
+            boolean allEnemiesDead = true;
+            if(player.health <=0)
+            {
+                gsm.add(GameStatesManager.GAMEOVER);
+                gsm.pop(GameStatesManager.PLAY3);
+            }
 
+
+            for (int i = 0; i < enemies.size(); i++) {
                 Enemy currentEnemy = enemies.get(i);
                 currentEnemy.checkCoin(player);
+                if (currentEnemy.getHealth() > 0)
+                    allEnemiesDead = false;
+
+
                 if (currentEnemy.getHealth() <= 0) {
 
                     continue; // Treci la următorul inamic dacă inamicul curent este mort
                 }
+
+
                 currentEnemy.update(player);
                 for (int j = i + 1; j < enemies.size(); j++) {
                     Enemy otherEnemy = enemies.get(j);
@@ -62,8 +78,15 @@ public class Level3 extends GameState {
             }
             player.update(enemies);
             cam.update();
+            if (allEnemiesDead) { // Pasul 4
+                gsm.add(GameStatesManager.GAMEOVER); // Pasul 5
+                gsm.pop(GameStatesManager.PLAY1); // Pasul 5
+            }
         }
+
+
     }
+
 
 
     public void input(MouseHandler mouse, KeyHandler key) {
@@ -105,7 +128,7 @@ public class Level3 extends GameState {
                 }
                 if(enemy.coin.once==true)
                 {
-                    score+= 100;
+                    score+= 250;
                 }
             }
         }

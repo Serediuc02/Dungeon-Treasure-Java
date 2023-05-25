@@ -13,7 +13,9 @@ public class Enemy extends Entity {
     private Camera cam;
     protected int xOffset;
     protected int yOffset;
-    public float health=100;
+    public int health;
+    protected float healthpercent=1;
+    protected int maxHealth=100;
     public Coin coin;
     public int coinPick=0;
 
@@ -131,13 +133,14 @@ public class Enemy extends Entity {
     public void update(Player player) {
         if(player != null )
         {
-
+            healthpercent=(float) health / (float) maxHealth;
             if(cam.getBoundsOnScreen().collides(dx,dy,this.bounds))
             {
                 super.update();// pt animatie
                 move(player);
                 if (!tc.collisionTile(dx, 0))
                 {
+
                     sens.getPos().x += dx;
                     pos.x += dx;
                    // coin.pos.x += dx;
@@ -156,6 +159,7 @@ public class Enemy extends Entity {
             }
 
             if (bounds.collides(player.getBounds())) {
+                player.health-=10;
                 if(this.left)
                 {
                     player.dx -= 2;
@@ -163,7 +167,6 @@ public class Enemy extends Entity {
                 if(this.right)
                 {
                     player.dx += 2;
-                    System.out.println("haha");
                 }
                 if(this.up)
                 {
@@ -175,9 +178,7 @@ public class Enemy extends Entity {
                 }
                 coin.setPos(new Vector2f(pos.x ,pos.y));
                 coin.updateBounds(this.bounds);
-
             }
-
         }
     }
     public void checkCoin(Player player){
@@ -189,8 +190,12 @@ public class Enemy extends Entity {
         {
             this.coin.picked=true;
             this.coin.isVisible=false;
-
         }
+    }
+    public void setHealth(int i,int j){
+        this.health=i;
+        this.maxHealth=j;
+        healthpercent=(float) health / (float) maxHealth;
     }
 
     public void knockBack(){
@@ -213,18 +218,16 @@ public class Enemy extends Entity {
         if(cam.getBoundsOnScreen().collides(this.bounds))
          {
 
-             g.setColor(Color.red);
-             g.drawRect((int) (pos.getWorldVar().x + bounds.getXOffset()), (int) (pos.getWorldVar().y + bounds.getYOffset()), (int) bounds.getWidth(), (int) bounds.getHeight());
-             g.setColor(Color.blue);
-             g.drawOval((int) (sens.getPos().getWorldVar().x), (int) (sens.getPos().getWorldVar().y), r, r);
+//             g.setColor(Color.red);
+//             g.drawRect((int) (pos.getWorldVar().x + bounds.getXOffset()), (int) (pos.getWorldVar().y + bounds.getYOffset()), (int) bounds.getWidth(), (int) bounds.getHeight());
+//             g.setColor(Color.blue);
+//             g.drawOval((int) (sens.getPos().getWorldVar().x), (int) (sens.getPos().getWorldVar().y), r, r);
              g.drawImage(ani.getImage(), (int) (pos.getWorldVar().x), (int) (pos.getWorldVar().y), size, size, null);
 
-            //bara de viata inamic
-            //todo de implementat viata la inamic si scalat dupa procentajul de viata
              g.setColor(Color.red);
              g.fillRect((int) (pos.getWorldVar().x + bounds.getXOffset() ), (int) (pos.getWorldVar().y + 40), 44, 5);
              g.setColor(Color.green);
-             g.fillRect((int) (pos.getWorldVar().x + bounds.getXOffset() ), (int) (pos.getWorldVar().y + 40), (int) (44 * (health/100)), 5);
+             g.fillRect((int) (pos.getWorldVar().x + bounds.getXOffset() ), (int) (pos.getWorldVar().y + 40), (int) (44 *healthpercent), 5);
         }
 
     }

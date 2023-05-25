@@ -25,7 +25,7 @@ public class PlayState extends GameState {
         Vector2f.setWorldVar(map.x, map.y);
         cam = new Camera(new AABB(new Vector2f(0, 0), GamePanel.width + 128, GamePanel.height + 128));
         this.cam=cam;
-        tm = new TileManager("tile/tilemap3.xml", cam);
+        tm = new TileManager("tile/tilemap1.xml", cam);
 
         enemies = new ArrayList<>();
         enemies.add(new Enemy(cam, new Sprite("entity/monk.png"), new Vector2f(0 + (GamePanel.width / 2) - 32 , 0 + (GamePanel.height / 2) - 32 ), 128));

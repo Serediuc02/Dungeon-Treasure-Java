@@ -10,6 +10,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
 public class Level1 extends GameState {
+
     public static Vector2f map;
     private Font font;
     private Player player;
@@ -19,19 +20,28 @@ public class Level1 extends GameState {
     private List<Enemy> enemies;
     private int score=0;
 
+
     public Level1(GameStatesManager gsm,Camera cam) {
         super(gsm);
         map = new Vector2f();
         Vector2f.setWorldVar(map.x, map.y);
-        cam = new Camera(new AABB(new Vector2f(0, 0), GamePanel.width + 128, GamePanel.height + 128));
+        //cam = new Camera(new AABB(new Vector2f(0, 0), GamePanel.width + 128, GamePanel.height + 128));
         this.cam=cam;
-        tm = new TileManager("tile/tilemap3.xml", cam);
+        tm = new TileManager("tile/tilemap1.xml", cam);
 
         enemies = new ArrayList<>();
-        enemies.add(new Enemy(cam, new Sprite("entity/monk.png"), new Vector2f(0 + (GamePanel.width / 2) - 32 , 0 + (GamePanel.height / 2) - 32 ), 128));
-        enemies.add(new Enemy(cam, new Sprite("entity/troll.png", 32, 32), new Vector2f(0 + (GamePanel.width / 2) - 32 - 300, 0 + (GamePanel.height / 2) - 32 + 100), 128));
-        enemies.add(new Enemy(cam, new Sprite("entity/guard.png", 32, 32), new Vector2f(0 + (GamePanel.width / 2) - 32 + 300, 0 + (GamePanel.height / 2) - 32 + 100), 128));
+        enemies.add(new Enemy(cam, new Sprite("entity/monk.png"), new Vector2f(0 + (GamePanel.width / 2) -600 , 0 + (GamePanel.height / 2) - 32 ), 128));
+        enemies.add(new Enemy(cam, new Sprite("entity/monk.png", 32, 32), new Vector2f(0 + (GamePanel.width / 2) - 32 + 60, 0 + (GamePanel.height / 2) - 32 + 700), 128));
+        enemies.add(new Enemy(cam, new Sprite("entity/monk.png", 32, 32), new Vector2f(0 + (GamePanel.width / 2) - 32 - 90, 0 + (GamePanel.height / 2) - 32 + 1500), 128));
+        enemies.add(new Enemy(cam, new Sprite("entity/monk.png", 32, 32), new Vector2f(0 + (GamePanel.width / 2) +700, 0 + (GamePanel.height / 2) - 32 + 1500), 128));
+        enemies.add(new Enemy(cam, new Sprite("entity/monk.png", 32, 32), new Vector2f(0 + (GamePanel.width / 2) +1600, 0 + (GamePanel.height / 2) - 32 + 1400), 128));
+        enemies.add(new Enemy(cam, new Sprite("entity/monk.png", 32, 32), new Vector2f(0 + (GamePanel.width / 2) + 600, 0 + (GamePanel.height / 2) - 32 + 2400), 128));
+        enemies.add(new Enemy(cam, new Sprite("entity/monk.png", 32, 32), new Vector2f(0 + (GamePanel.width / 2) +2000, 0 + (GamePanel.height / 2) - 32 + 2100), 128));
 
+
+        for (Enemy enemy : enemies) {
+            enemy.setHealth(50,50);
+            }
         player = new Player(cam,new Sprite("entity/player2.png"), new Vector2f(0 + (GamePanel.width / 2) - 32+60, 0 + (GamePanel.height / 2) - 32), 128);
         cam.target(player);
     }
@@ -39,14 +49,27 @@ public class Level1 extends GameState {
         Vector2f.setWorldVar(map.x, map.y);
         if(!gsm.isStateActive(GameStatesManager.PAUSE))
         {
-            for (int i = 0; i < enemies.size(); i++) {
+            boolean allEnemiesDead = true;
+            if(player.health <=0)
+            {
+                gsm.add(GameStatesManager.GAMEOVER);
+                gsm.pop(GameStatesManager.PLAY1);
+            }
 
+
+            for (int i = 0; i < enemies.size(); i++) {
                 Enemy currentEnemy = enemies.get(i);
                 currentEnemy.checkCoin(player);
+                if (currentEnemy.getHealth() > 0)
+                    allEnemiesDead = false;
+
+
                 if (currentEnemy.getHealth() <= 0) {
 
                     continue; // Treci la următorul inamic dacă inamicul curent este mort
                 }
+
+
                 currentEnemy.update(player);
                 for (int j = i + 1; j < enemies.size(); j++) {
                     Enemy otherEnemy = enemies.get(j);
@@ -62,7 +85,13 @@ public class Level1 extends GameState {
             }
             player.update(enemies);
             cam.update();
+            if (allEnemiesDead) { // Pasul 4
+                gsm.add(GameStatesManager.GAMEOVER); // Pasul 5
+                gsm.pop(GameStatesManager.PLAY1); // Pasul 5
+            }
         }
+
+
     }
 
 

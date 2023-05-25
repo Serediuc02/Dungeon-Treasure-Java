@@ -2,7 +2,7 @@ package com.andrei.game.util;
 
 import com.andrei.game.GamePanel;
 import com.andrei.game.entity.Entity;
-import com.andrei.game.states.PlayState;
+import com.andrei.game.states.*;
 import com.andrei.game.util.AABB;
 import com.andrei.game.util.Vector2f;
 import java.awt.*;
@@ -22,8 +22,8 @@ public class Camera {
     private int widthLimit;
     private int heightLimit;
     private Entity e;
-    public Camera(AABB colisionCam){
 
+    public Camera(AABB colisionCam){
         this.colisionCam=colisionCam;
         float x = colisionCam.getPos().x;
         float y = colisionCam.getPos().y;
@@ -33,7 +33,6 @@ public class Camera {
         this.widthLimit = widthLim;
         this.heightLimit = heightLim;
     }
-
     public Vector2f getPos() {
         return colisionCam.getPos();
     }
@@ -48,7 +47,6 @@ public class Camera {
         return colisionCam;
     }
 
-//TODO modifica camera cu tilesize si vezi in game manager daca mai trebuie 64 adunat
     public void update(){
         move();
         if(e != null)
@@ -58,9 +56,26 @@ public class Camera {
                 if((e.getBounds().getPos().getWorldVar().x + e.getDx()) < Vector2f.getWorldVarX(widthLimit - colisionCam.getWidth() / 2) - 64 &&
                         (e.getBounds().getPos().getWorldVar().x + e.getDx()) > Vector2f.getWorldVarX(GamePanel.width / 2 - 64 ))
                 {
-                    PlayState.map.x += dx;
-                   // colisionCam.getPos().x +=dx;
-                    bounds.getPos().x += dx;
+                    if(GameStatesManager.states[GameStatesManager.PLAY1]!=null)
+                    {
+                        Level1.map.x += dx;
+                        bounds.getPos().x += dx;
+                    }
+                    if(GameStatesManager.states[GameStatesManager.PLAY2]!=null)
+                    {
+                        Level2.map.x += dx;
+                        bounds.getPos().x += dx;
+                    }
+                    if(GameStatesManager.states[GameStatesManager.PLAY3]!=null)
+                    {
+                        Level3.map.x += dx;
+                        bounds.getPos().x += dx;
+                    }
+
+                    //PlayState.map.x +=dx;
+                    //Level2.map.x+= dx;
+
+
                 }
             }
             if(!e.yCol)
@@ -69,13 +84,28 @@ public class Camera {
                         (e.getBounds().getPos().getWorldVar().y + e.getDy()) > Vector2f.getWorldVarY(GamePanel.height / 2 -64 ))
                 {
 
-                    PlayState.map.y += dy;
-                    bounds.getPos().y += dy;
-                   // colisionCam.getPos().y +=dy;
+
+                    if(GameStatesManager.states[GameStatesManager.PLAY1]!=null)
+                    {
+                        Level1.map.y += dy;
+                        bounds.getPos().y += dy;
+                    }
+                    if(GameStatesManager.states[GameStatesManager.PLAY2]!=null)
+                    {
+                        Level2.map.y += dy;
+                        bounds.getPos().y += dy;
+                    }
+                    if(GameStatesManager.states[GameStatesManager.PLAY3]!=null)
+                    {
+                        Level3.map.y += dy;
+                        bounds.getPos().y += dy;
+                    }
+
                 }
 
             }
         }
+
 
     }
     private void move(){
@@ -188,32 +218,135 @@ public class Camera {
                 right=false;
             }
         }else {
-            if(PlayState.map.y + GamePanel.height / 2 - e.getSize() / 2 + dy > e.getBounds().getPos().y + e.getDy() + 2 )
+//            if(GameStatesManager.states[GameStatesManager.PLAY1]!=null)
+//            {
+//                if(Level1.map.y + GamePanel.height / 2 - e.getSize() / 2 + dy > e.getBounds().getPos().y + e.getDy() + 2 )
+//                {
+//                    up = true;
+//                    down=false;
+//                } else if (Level1.map.y + GamePanel.height / 2 - e.getSize() / 2 + dy < e.getBounds().getPos().y + e.getDy() - 2)
+//                {
+//                    down=true;
+//                    up=false;
+//                }else {
+//                    dy=0;
+//                    up=false;
+//                    down=false;
+//                }
+//                if(Level1.map.x + GamePanel.width / 2 - e.getSize() / 2 + dx > e.getBounds().getPos().x + e.getDx() + 2 )
+//                {
+//                    left = true;
+//                    right=false;
+//                } else if (Level1.map.x + GamePanel.width / 2 - e.getSize() / 2 + dx < e.getBounds().getPos().x + e.getDx() - 2)
+//                {
+//                    right=true;
+//                    left=false;
+//                }else {
+//                    dx=0;
+//                    right=false;
+//                    left=false;
+//                }
+//            }
+
+
+
+//            if(GameStatesManager.states[5]!=null)
+//            {
+//
+//            }
+//            if(GameStatesManager.states[6]!=null)
+//            {
+//
+//            }
+            if(GameStatesManager.states[GameStatesManager.PLAY1]!=null)
             {
-                up = true;
-                down=false;
-            } else if (PlayState.map.y + GamePanel.height / 2 - e.getSize() / 2 + dy < e.getBounds().getPos().y + e.getDy() - 2)
-            {
-                down=true;
-                up=false;
-            }else {
-                dy=0;
-                up=false;
-                down=false;
+                if(Level1.map.y + GamePanel.height / 2 - e.getSize() / 2 + dy > e.getBounds().getPos().y + e.getDy() + 2 )
+                {
+                    up = true;
+                    down=false;
+                } else if (Level1.map.y + GamePanel.height / 2 - e.getSize() / 2 + dy < e.getBounds().getPos().y + e.getDy() - 2)
+                {
+                    down=true;
+                    up=false;
+                }else {
+                    dy=0;
+                    up=false;
+                    down=false;
+                }
+                if(Level1.map.x + GamePanel.width / 2 - e.getSize() / 2 + dx > e.getBounds().getPos().x + e.getDx() + 2 )
+                {
+                    left = true;
+                    right=false;
+                } else if (Level1.map.x + GamePanel.width / 2 - e.getSize() / 2 + dx < e.getBounds().getPos().x + e.getDx() - 2)
+                {
+                    right=true;
+                    left=false;
+                }else {
+                    dx=0;
+                    right=false;
+                    left=false;
+                }
             }
-            if(PlayState.map.x + GamePanel.width / 2 - e.getSize() / 2 + dx > e.getBounds().getPos().x + e.getDx() + 2 )
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            if(GameStatesManager.states[GameStatesManager.PLAY2]!=null)
             {
-                left = true;
-                right=false;
-            } else if (PlayState.map.x + GamePanel.width / 2 - e.getSize() / 2 + dx < e.getBounds().getPos().x + e.getDx() - 2)
-            {
-                right=true;
-                left=false;
-            }else {
-                dx=0;
-                right=false;
-                left=false;
+                if(Level2.map.y + GamePanel.height / 2 - e.getSize() / 2 + dy > e.getBounds().getPos().y + e.getDy() + 2 )
+                {
+                    up = true;
+                    down=false;
+                } else if (Level2.map.y + GamePanel.height / 2 - e.getSize() / 2 + dy < e.getBounds().getPos().y + e.getDy() - 2)
+                {
+                    down=true;
+                    up=false;
+                }else {
+                    dy=0;
+                    up=false;
+                    down=false;
+                }
+                if(Level2.map.x + GamePanel.width / 2 - e.getSize() / 2 + dx > e.getBounds().getPos().x + e.getDx() + 2 )
+                {
+                    left = true;
+                    right=false;
+                } else if (Level2.map.x + GamePanel.width / 2 - e.getSize() / 2 + dx < e.getBounds().getPos().x + e.getDx() - 2)
+                {
+                    right=true;
+                    left=false;
+                }else {
+                    dx=0;
+                    right=false;
+                    left=false;
+                }
             }
+            if(GameStatesManager.states[GameStatesManager.PLAY3]!=null)
+            {
+                if(Level3.map.y + GamePanel.height / 2 - e.getSize() / 2 + dy > e.getBounds().getPos().y + e.getDy() + 2 )
+                {
+                    up = true;
+                    down=false;
+                } else if (Level3.map.y + GamePanel.height / 2 - e.getSize() / 2 + dy < e.getBounds().getPos().y + e.getDy() - 2)
+                {
+                    down=true;
+                    up=false;
+                }else {
+                    dy=0;
+                    up=false;
+                    down=false;
+                }
+                if(Level3.map.x + GamePanel.width / 2 - e.getSize() / 2 + dx > e.getBounds().getPos().x + e.getDx() + 2 )
+                {
+                    left = true;
+                    right=false;
+                } else if (Level3.map.x + GamePanel.width / 2 - e.getSize() / 2 + dx < e.getBounds().getPos().x + e.getDx() - 2)
+                {
+                    right=true;
+                    left=false;
+                }else {
+                    dx=0;
+                    right=false;
+                    left=false;
+                }
+            }
+
         }
     }
 

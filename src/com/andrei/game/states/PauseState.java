@@ -1,17 +1,12 @@
 package com.andrei.game.states;
 
 import com.andrei.game.GamePanel;
-import com.andrei.game.graphics.Sprite;
 import com.andrei.game.util.KeyHandler;
 import com.andrei.game.util.MouseHandler;
 import com.andrei.game.util.Vector2f;
 import com.andrei.game.ui.Button;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 
 public class PauseState extends GameState {
@@ -29,6 +24,7 @@ public class PauseState extends GameState {
 
 
         font = new Font("MeatMadness", Font.PLAIN, 48);
+
         btnResume = new Button("Resume", imgButton, font, new Vector2f(GamePanel.width/2, GamePanel.height/2-48),32,16);
         btnExit = new Button("Exit", imgButton, font, new Vector2f(GamePanel.width/2, GamePanel.height/2+96),32,16);
         btnMenu = new Button("Menu", imgButton, font, new Vector2f(GamePanel.width/2, GamePanel.height/2+23),32,16);
@@ -42,6 +38,7 @@ public class PauseState extends GameState {
         });
 
         btnMenu.addEvent(e -> {
+
             gsm.add(GameStatesManager.MENU);
 
             if(gsm.isStateActive(GameStatesManager.PLAY1))
