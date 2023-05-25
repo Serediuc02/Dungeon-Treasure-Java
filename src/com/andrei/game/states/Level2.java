@@ -9,7 +9,7 @@ import com.andrei.game.graphics.*;
 import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
-public class PlayState extends GameState {
+public class Level2 extends GameState {
     public static Vector2f map;
     private Font font;
     private Player player;
@@ -19,7 +19,7 @@ public class PlayState extends GameState {
     private List<Enemy> enemies;
     private int score=0;
 
-    public PlayState(GameStatesManager gsm,Camera cam) {
+    public Level2(GameStatesManager gsm,Camera cam) {
         super(gsm);
         map = new Vector2f();
         Vector2f.setWorldVar(map.x, map.y);

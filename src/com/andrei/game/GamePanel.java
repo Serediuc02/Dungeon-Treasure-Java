@@ -22,12 +22,12 @@ public class GamePanel extends JPanel implements Runnable {
 
 
     public GamePanel(int width, int height){
-
-        this.width=width;
-        this.height=height;
+        GamePanel.width=width;
+        GamePanel.height=height;
         setPreferredSize(new Dimension(width,height));
         setFocusable(true);
         requestFocus();
+
     }
 
     @Override
@@ -56,13 +56,13 @@ public class GamePanel extends JPanel implements Runnable {
 
         final double GAME_HERTZ=60.0;
         final double TBU = 1000000000/GAME_HERTZ;//time before update
-        final int MUBR = 5; // must update before render
+        final int MUBR = 3; // must update before render
 
         double lastUpdateTime = System.nanoTime();
         double lastRenderTime;
 
         final double TARGET_FPS = 60;
-        final double TTBR = 1000000000/TARGET_FPS;//total tiime before render
+        final double TTBR = 1000000000/TARGET_FPS;//total time before render
 
         int frameCount = 0;
         int lastSecondTime = (int) (lastUpdateTime/1000000000);
@@ -90,7 +90,7 @@ public class GamePanel extends JPanel implements Runnable {
             int thisSecond = (int) (lastUpdateTime / 1000000000);
             if(thisSecond > lastSecondTime){
                 if(frameCount != oldFrameCount){
-                    System.out.println("NEW SECOND "+thisSecond+" "+ frameCount);
+                    System.out.println(" NEW SECOND "+thisSecond+" "+ frameCount);
                     oldFrameCount = frameCount;
                 }
                 frameCount=0;
@@ -99,7 +99,6 @@ public class GamePanel extends JPanel implements Runnable {
             while(now - lastRenderTime < TTBR && now -lastUpdateTime < TBU)
             {
                 Thread.yield();
-
                 try{
                     Thread.sleep(1);
                 }catch (Exception e){
@@ -129,7 +128,5 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics g2= (Graphics) this.getGraphics();
         g2.drawImage(img,0,0,width,height,null);
         g2.dispose();
-
     }
-
 }

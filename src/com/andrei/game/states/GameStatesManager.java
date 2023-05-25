@@ -7,21 +7,24 @@ import com.andrei.game.util.KeyHandler;
 import com.andrei.game.util.MouseHandler;
 import com.andrei.game.util.AABB;
 import com.andrei.game.util.Vector2f;
-import jdk.jshell.spi.SPIResolutionException;
 import com.andrei.game.graphics.Font;
 import com.andrei.game.graphics.Fontf;
 import java.awt.*;
 
-
-
 public class GameStatesManager
 {
     private GameState states[];
+
     public static Vector2f map;
     public static final int MENU = 0;
-    public static final int PLAY = 1;
-    public static final int PAUSE = 2;
-    public static final int GAMEOVER = 3;
+    public static final int PAUSE = 1;
+    public static final int GAMEOVER = 2;
+
+    public static final int LEVELSELECTOR = 3;
+    public static final int PLAY1 = 4;
+    public static final int PLAY2 = 5;
+    public static final int PLAY3 = 6;
+
     public static Font font;
     public static Fontf fontf;
     public static Sprite ui;
@@ -34,7 +37,7 @@ public class GameStatesManager
         GameStatesManager.g=g;
         map=new Vector2f(GamePanel.width,GamePanel.height);
         Vector2f.setWorldVar(map.x,map.y);
-        states = new GameState[4];
+        states = new GameState[7];
 
         font= new Font("font/font.png", 10, 10);
         fontf= new Fontf();
@@ -47,20 +50,32 @@ public class GameStatesManager
 
         cam = new Camera(new AABB(new Vector2f(-64, -64), GamePanel.width + 128, GamePanel.height + 128));
 
-        states[PLAY]= new PlayState(this,cam);
+        states[MENU]= new MenuState(this);
+        //states[PLAY]= new PlayState(this,cam);
+
     }
 
     public void add(int state) {
         if (states[state] != null){
+
             return;
         }
-        if(state == PLAY)
+        if(state == PLAY1)
         {
             cam = new Camera(new AABB(new Vector2f(0,0), GamePanel.width+64,GamePanel.height+64));
-            states[PLAY]= new PlayState(this,cam);
-        }
-        else if(state == MENU)
+            states[PLAY1]= new PlayState(this,cam);
+
+        } else if (state == PLAY2) {
+            cam = new Camera(new AABB(new Vector2f(0,0), GamePanel.width+64,GamePanel.height+64));
+            states[PLAY2]= new PlayState(this,cam);
+
+        } else if (state == PLAY3) {
+            cam = new Camera(new AABB(new Vector2f(0,0), GamePanel.width+64,GamePanel.height+64));
+            states[PLAY3]= new PlayState(this,cam);
+
+        }else if(state == MENU)
         {
+
             states[MENU]= new MenuState(this);
         }
         else if(state == PAUSE)
@@ -70,6 +85,10 @@ public class GameStatesManager
         else if(state == GAMEOVER)
         {
             states[GAMEOVER]= new GameOverState(this);
+        }
+        else if(state == LEVELSELECTOR)
+        {
+            states[LEVELSELECTOR]= new LevelSelector(this);
         }
     }
 
@@ -86,13 +105,15 @@ public class GameStatesManager
         for(int i=0; i < states.length; i++)
         {
             if(states[i]!=null)
+                System.out.println(states[i]);
+
+            if(states[i]!=null)
             {
                 states[i].update();
             }
         }
     }
     public void input(MouseHandler mouse, KeyHandler key){
-
         for(int i=0;i < states.length; i++)
         {
             if(states[i]!=null)
@@ -115,7 +136,6 @@ public class GameStatesManager
     public GameState getState(int state){
         return states[state];
     }
-
     public boolean isStateActive(int state){return states[state]!= null;}
     public void pop(int state){
         states[state]=null;

@@ -24,11 +24,13 @@ public class Enemy extends Entity {
         acc = 1f;
         maxSpeed = 2f;
         r = 350;
+
         coin = new Coin(cam,new Sprite("entity/coin_bronze.png",10,10),new Vector2f((this.pos.x),(this.pos.y)),10);
-        bounds.setWidth(42);
+        bounds.setWidth(45);
         bounds.setHeight(20);
-        bounds.setXOffset(12);
-        bounds.setYOffset(40);
+        bounds.setXOffset(43);
+        bounds.setYOffset(80);
+
         coin.setPos(new Vector2f(pos.x, pos.y));
         sens = new AABB(new Vector2f(f.x + size / 2 - r / 2, f.y + size / 2 - r / 2), r);
 
@@ -39,14 +41,14 @@ public class Enemy extends Entity {
     private void move(Player player) {
         if (sens.colCircleBox(player.getBounds())) {
             //System.out.println("Te a vazut");
-            if (pos.y - 40 > player.pos.y + 1) {
+            if (pos.y  > player.pos.y + 1) {
                 dy -= acc;
                 up = true;
                 down = false;
                 if (dy < -maxSpeed) {
                     dy = -maxSpeed;
                 }
-            } else if (pos.y -40 < player.pos.y - 1) {
+            } else if (pos.y  < player.pos.y - 1) {
                 dy += acc;
                 down = true;
                 up = false;
@@ -58,14 +60,15 @@ public class Enemy extends Entity {
                 up = false;
                 down = false;
             }
-            if (pos.x - 32> player.pos.x + 1) {
+            if (pos.x > player.pos.x + 1) {
                 dx -= acc;
                 left = true;
                 right=false;
                 if (dx < -maxSpeed) {
                     dx = -maxSpeed;
                 }
-            } else if (pos.x -32 < player.pos.x - 1) {
+            } else if (pos.x < player.pos.x - 1)
+            {
                 dx += acc;
                 right = true;
                 left = false;
@@ -92,9 +95,17 @@ public class Enemy extends Entity {
         if(health==0)
             destroy();
 
+        if(left)
+        {
+            lastAni=LEFT;
+        } else if (right) {
+            lastAni= RIGHT;
+        }
+
         if(left){
             if (currentAnimation != LEFT || ani.getDelay() == -1) {
                 setAnimation(LEFT,sprite.getSpriteArray(LEFT),5);
+
             }
         }
         else if(right){
@@ -103,13 +114,13 @@ public class Enemy extends Entity {
 
             }
         } else if(up){
-            if (currentAnimation != UP || ani.getDelay() == -1) {
-                setAnimation(UP,sprite.getSpriteArray(UP),5);
+            if (currentAnimation != lastAni || ani.getDelay() == -1) {
+                setAnimation(lastAni,sprite.getSpriteArray(lastAni),5);
             }
         }
         else if(down){
-            if (currentAnimation != DOWN || ani.getDelay() == -1) {
-                setAnimation(DOWN,sprite.getSpriteArray(DOWN),5);
+            if (currentAnimation != lastAni || ani.getDelay() == -1) {
+                setAnimation(lastAni,sprite.getSpriteArray(lastAni),5);
             }
         } else
         {
@@ -136,7 +147,7 @@ public class Enemy extends Entity {
                     pos.y += dy;
                   //  coin.pos.y +=dy;
                 }
-                coin.setPos(new Vector2f(pos.x,pos.y));
+                coin.setPos(new Vector2f(pos.x ,pos.y));
                 coin.updateBounds(this.bounds);
 
             }
@@ -145,24 +156,26 @@ public class Enemy extends Entity {
             }
 
             if (bounds.collides(player.getBounds())) {
-                //System.out.println("Jucatorul a fost lovit de inamic");
-                if(currentAnimation == LEFT)
+                if(this.left)
                 {
-                    player.dx -= 1;
+                    player.dx -= 2;
+                }
+                if(this.right)
+                {
+                    player.dx += 2;
+                    System.out.println("haha");
+                }
+                if(this.up)
+                {
+                    player.dy -= 2;
+                }
+                if(this.down)
+                {
+                    player.dy += 2;
+                }
+                coin.setPos(new Vector2f(pos.x ,pos.y));
+                coin.updateBounds(this.bounds);
 
-                }
-                else if(currentAnimation == RIGHT)
-                {
-                    player.dx += 1;
-                }
-                else if(currentAnimation == UP)
-                {
-                    player.dy -= 1;
-                }
-                else if(currentAnimation == DOWN)
-                {
-                    player.dy += 1;
-                }
             }
 
         }
@@ -172,7 +185,6 @@ public class Enemy extends Entity {
         {
             this.coin.isVisible=true;
         }
-
         if(coin.coinCollision(player))
         {
             this.coin.picked=true;
@@ -180,21 +192,18 @@ public class Enemy extends Entity {
 
         }
     }
-//    public boolean coinPick(){
-//
-//
-//    }
+
     public void knockBack(){
-        if (this.currentAnimation == UP) {
+        if (this.up) {
             this.dy += 15;
         }
-        if (this.currentAnimation == LEFT) {
+        if (this.left) {
             this.dx += 15;
         }
-        if (this.currentAnimation == RIGHT) {
+        if (this.right) {
             this.dx -= 15;
         }
-        if (this.currentAnimation == DOWN) {
+        if (this.down) {
             this.dy -= 15;
         }
     }
@@ -213,9 +222,9 @@ public class Enemy extends Entity {
             //bara de viata inamic
             //todo de implementat viata la inamic si scalat dupa procentajul de viata
              g.setColor(Color.red);
-             g.fillRect((int) (pos.getWorldVar().x + bounds.getXOffset() ), (int) (pos.getWorldVar().y - 5), 44, 5);
+             g.fillRect((int) (pos.getWorldVar().x + bounds.getXOffset() ), (int) (pos.getWorldVar().y + 40), 44, 5);
              g.setColor(Color.green);
-             g.fillRect((int) (pos.getWorldVar().x + bounds.getXOffset() ), (int) (pos.getWorldVar().y - 5), (int) (44 * (health/100)), 5);
+             g.fillRect((int) (pos.getWorldVar().x + bounds.getXOffset() ), (int) (pos.getWorldVar().y + 40), (int) (44 * (health/100)), 5);
         }
 
     }

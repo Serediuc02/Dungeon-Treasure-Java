@@ -135,17 +135,14 @@ public class Sprite {
         float x=pos.x;
         float y= pos.y;
         currentFont = f;
-
         for(int i=0;i<word.length();i++)
         {
             if( word.charAt(i) != 32)
             {
                 g.drawImage(f.getFont(word.charAt(i)), (int) x, (int) y, width, height, null);
             }
-
             x += xOffset;
             y += yOffset;
-
         }
     }
 
